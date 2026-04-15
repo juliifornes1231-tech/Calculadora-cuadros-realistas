@@ -56,14 +56,15 @@
 
     .info-bordes {
         font-size: 12px;
-        color: #777;
-        background: #f9f9f9;
-        padding: 10px;
+        color: #666;
+        background: #fdfdfd;
+        padding: 12px;
         border-radius: 6px;
         margin-bottom: 20px;
-        line-height: 1.4;
+        line-height: 1.5;
         text-align: left;
-        border-left: 3px solid var(--color-verde);
+        border: 1px solid #eee;
+        border-left: 4px solid var(--color-verde);
     }
 
     .input-group {
@@ -90,6 +91,11 @@
         border-radius: 6px;
         box-sizing: border-box;
         font-family: inherit;
+        outline: none;
+    }
+
+    input:focus, select:focus {
+        border-color: var(--color-verde);
     }
 
     #resultado {
@@ -130,11 +136,11 @@
 <body>
 
 <div class="calc-container">
-    <img src="EternityLogo.png" alt="Logo Eternity" class="logo-marca">
+    <img src="ET RNITY (5).png" alt="Logo Eternity" class="logo-marca">
     <h2>Tamaño Personalizado</h2>
 
     <div class="info-bordes">
-        Los cuadros cuentan con bordes/varillas de MDF de 3cm de ancho x 5mm de grosor, pegados por detrás a 90° para facilitar el colgado directo.
+        Los cuadros son con bordes/varillas de MDF de 3cm de ancho x 5mm de grosor, que van pegados por detrás del cuadro a 90° y facilitan el colgado del cuadro.
     </div>
     
     <div style="display: flex; gap: 10px;">
@@ -151,30 +157,30 @@
     <div class="input-group">
         <label>Categoría de Fotografía</label>
         <select id="categoria" onchange="calcular()">
-            <option value="15000">Una persona (+$15.000)</option>
-            <option value="20000">Dos personas (+$20.000)</option>
-            <option value="15000">Mascota (+$15.000)</option>
-            <option value="14000">Objeto (+$14.000)</option>
-            <option value="17000">Paisaje natural (+$17.000)</option>
-            <option value="19000">Paisaje con silueta (+$19.000)</option>
+            <option value="15000">Una persona</option>
+            <option value="20000">Dos personas</option>
+            <option value="15000">Mascota</option>
+            <option value="14000">Objeto</option>
+            <option value="17000">Paisaje natural</option>
+            <option value="19000">Paisaje con silueta de personas</option>
             <option value="0">Otro (Consultar por privado)</option>
         </select>
     </div>
 
     <div class="input-group">
-        <label>Tipo de Fondo</label>
+        <label>Fondo</label>
         <select id="fondo" onchange="calcular()">
             <option value="0">Fondo incluido</option>
-            <option value="-5000">Fondo simplificado (-$5.000)</option>
-            <option value="-7000">Fondo liso (-$7.000)</option>
+            <option value="-5000">Fondo simplificado</option>
+            <option value="-7000">Fondo liso</option>
         </select>
     </div>
 
     <div class="input-group">
-        <label>Diseño de Bordes</label>
+        <label>Bordes</label>
         <select id="bordes" onchange="calcular()">
             <option value="0">Lisos</option>
-            <option value="5000">Siguiendo el diseño (+$5.000)</option>
+            <option value="5000">Siguiendo el diseño elegido</option>
         </select>
     </div>
 
@@ -182,7 +188,7 @@
         <label>Cantidad</label>
         <select id="cantidad" onchange="calcular()">
             <option value="1">1 Unidad</option>
-            <option value="2">Pack x2 (20% OFF en el total)</option>
+            <option value="2">Pack x2 (20% OFF)</option>
         </select>
     </div>
 
@@ -201,44 +207,31 @@ function calcular() {
     const extraBordes = parseFloat(document.getElementById('bordes').value);
     const cantidad = parseInt(document.getElementById('cantidad').value);
     
-    // 1. Base por tamaño (30x40 = 1200 * 12.5 = 15000)
+    // Cálculo base $12.5 por cm2
     const factorPrecio = 12.5; 
     let baseTamaño = (ancho * alto) * factorPrecio;
 
-    // 2. Sumamos extras de categoría y bordes, y restamos fondo
+    // Suma de todas las condiciones
     let precioUnitario = baseTamaño + extraFoto + ajusteFondo + extraBordes;
     
-    // Redondeo para limpieza
+    // Redondeo
     precioUnitario = Math.ceil(precioUnitario / 100) * 100;
 
     let total;
     let mensaje = "";
 
     if (cantidad === 2) {
-        total = (precioUnitario * 2) * 0.8; // 20% OFF sobre el total
+        total = (precioUnitario * 2) * 0.8; 
         let ahorro = (precioUnitario * 2) - total;
         mensaje = `<div class="promo-msg">¡Ahorrás $${ahorro.toLocaleString('es-AR')} con el Pack x2!</div>`;
     } else {
         total = precioUnitario;
     }
 
-    // Si eligió "Otro", avisamos
-    if (document.getElementById('categoria').options[document.getElementById('categoria').selectedIndex].text.includes("Otro")) {
-        mensaje = `<div class="promo-msg">Categoría "Otro": Consultanos para el precio final.</div>`;
+    // Alerta de consulta si es "Otro"
+    const catSelect = document.getElementById('categoria');
+    if (catSelect.options[catSelect.selectedIndex].text.includes("Otro")) {
+        mensaje = `<div class="promo-msg">Opción "Otro": El precio final se confirmará por privado.</div>`;
     }
 
-    document.getElementById('resultado').innerText = `Total: $${total.toLocaleString('es-AR')}`;
-    document.getElementById('promo-info').innerHTML = mensaje;
-
-    const categoriaText = document.getElementById('categoria').options[document.getElementById('categoria').selectedIndex].text;
-    const msg = `Hola! Quiero un cuadro de ${ancho}x${alto}cm. Foto: ${categoriaText}. Cantidad: ${cantidad}. Total estimado: $${total.toLocaleString('es-AR')}.`;
-    
-    // REEMPLAZÁ CON TU WHATSAPP (549...)
-    document.getElementById('link-wpp').href = `https://wa.me/5492604800578?text=${encodeURIComponent(msg)}`;
-}
-
-window.onload = calcular;
-</script>
-
-</body>
-</html>
+    document.getElementById('resultado').innerText
