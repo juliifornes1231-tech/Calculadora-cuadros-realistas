@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presupuesto Personalizado | Eternity</title>
+<style>
+    :root {
+        --color-verde: #8ec6c5;
+        --color-violeta: #8566aa;
+        --color-azul: #6983aa;
+        --color-fondo: #f4f4f4;
+        --color-texto: #333;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--color-fondo);
+        color: var(--color-texto);
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .calc-container {
+        max-width: 450px;
+        width: 100%;
+        padding: 30px;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        text-align: center;
+        border-top: 5px solid var(--color-azul);
+    }
+
+    .logo-marca {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 10px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    h2 {
+        font-weight: 300;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        font-size: 1rem;
+        margin: 0 0 15px 0;
+        color: var(--color-azul);
+    }
+
+    .info-bordes {
+        font-size: 12px;
+        color: #777;
+        background: #f9f9f9;
+        padding: 10px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        line-height: 1.4;
+        text-align: left;
+        border-left: 3px solid var(--color-verde);
+    }
+
+    .input-group {
+        margin-top: 15px;
+        text-align: left;
+    }
+
+    label {
+        font-size: 10px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--color-azul);
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #e1e1e1;
+        background-color: #fafafa;
+        font-size: 15px;
+        border-radius: 6px;
+        box-sizing: border-box;
+        font-family: inherit;
+    }
+
+    #resultado {
+        margin-top: 25px;
+        font-size: 26px;
+        font-weight: bold;
+        background-color: var(--color-fondo);
+        padding: 15px;
+        border-radius: 8px;
+        color: var(--color-texto);
+    }
+
+    .promo-msg {
+        color: var(--color-violeta);
+        font-size: 14px;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    .btn-wpp {
+        display: block;
+        margin-top: 25px;
+        padding: 15px;
+        background-color: var(--color-violeta);
+        color: #ffffff;
+        text-decoration: none;
+        text-transform: uppercase;
+        font-size: 12px;
+        font-weight: bold;
+        letter-spacing: 1px;
+        border-radius: 30px;
+        transition: 0.3s;
+    }
+
+    .btn-wpp:hover { background-color: #6e548e; }
+</style>
+</head>
+<body>
+
+<div class="calc-container">
+    <img src="ET RNITY (5).png" alt="Logo Eternity" class="logo-marca">
+    <h2>Tamaño Personalizado</h2>
+
+    <div class="info-bordes">
+        Los cuadros cuentan con bordes/varillas de MDF de 3cm de ancho x 5mm de grosor, pegados por detrás a 90° para facilitar el colgado directo.
+    </div>
+    
+    <div style="display: flex; gap: 10px;">
+        <div class="input-group" style="flex: 1;">
+            <label>Ancho (cm)</label>
+            <input type="number" id="ancho" value="30" oninput="calcular()">
+        </div>
+        <div class="input-group" style="flex: 1;">
+            <label>Alto (cm)</label>
+            <input type="number" id="alto" value="40" oninput="calcular()">
+        </div>
+    </div>
+
+    <div class="input-group">
+        <label>Categoría de Fotografía</label>
+        <select id="categoria" onchange="calcular()">
+            <option value="15000">Una persona (+$15.000)</option>
+            <option value="20000">Dos personas (+$20.000)</option>
+            <option value="15000">Mascota (+$15.000)</option>
+            <option value="14000">Objeto (+$14.000)</option>
+            <option value="17000">Paisaje natural (+$17.000)</option>
+            <option value="19000">Paisaje con silueta (+$19.000)</option>
+            <option value="0">Otro (Consultar por privado)</option>
+        </select>
+    </div>
+
+    <div class="input-group">
+        <label>Tipo de Fondo</label>
+        <select id="fondo" onchange="calcular()">
+            <option value="0">Fondo incluido</option>
+            <option value="-5000">Fondo simplificado (-$5.000)</option>
+            <option value="-7000">Fondo liso (-$7.000)</option>
+        </select>
+    </div>
+
+    <div class="input-group">
+        <label>Diseño de Bordes</label>
+        <select id="bordes" onchange="calcular()">
+            <option value="0">Lisos</option>
+            <option value="5000">Siguiendo el diseño (+$5.000)</option>
+        </select>
+    </div>
+
+    <div class="input-group">
+        <label>Cantidad</label>
+        <select id="cantidad" onchange="calcular()">
+            <option value="1">1 Unidad</option>
+            <option value="2">Pack x2 (20% OFF en el total)</option>
+        </select>
+    </div>
+
+    <div id="resultado">Total: $0</div>
+    <div id="promo-info"></div>
+    
+    <a id="link-wpp" class="btn-wpp" href="#" target="_blank">Consultar por WhatsApp</a>
+</div>
+
+<script>
+function calcular() {
+    const ancho = parseFloat(document.getElementById('ancho').value) || 0;
+    const alto = parseFloat(document.getElementById('alto').value) || 0;
+    const extraFoto = parseFloat(document.getElementById('categoria').value);
+    const ajusteFondo = parseFloat(document.getElementById('fondo').value);
+    const extraBordes = parseFloat(document.getElementById('bordes').value);
+    const cantidad = parseInt(document.getElementById('cantidad').value);
+    
+    // 1. Base por tamaño (30x40 = 1200 * 12.5 = 15000)
+    const factorPrecio = 12.5; 
+    let baseTamaño = (ancho * alto) * factorPrecio;
+
+    // 2. Sumamos extras de categoría y bordes, y restamos fondo
+    let precioUnitario = baseTamaño + extraFoto + ajusteFondo + extraBordes;
+    
+    // Redondeo para limpieza
+    precioUnitario = Math.ceil(precioUnitario / 100) * 100;
+
+    let total;
+    let mensaje = "";
+
+    if (cantidad === 2) {
+        total = (precioUnitario * 2) * 0.8; // 20% OFF sobre el total
+        let ahorro = (precioUnitario * 2) - total;
+        mensaje = `<div class="promo-msg">¡Ahorrás $${ahorro.toLocaleString('es-AR')} con el Pack x2!</div>`;
+    } else {
+        total = precioUnitario;
+    }
+
+    // Si eligió "Otro", avisamos
+    if (document.getElementById('categoria').options[document.getElementById('categoria').selectedIndex].text.includes("Otro")) {
+        mensaje = `<div class="promo-msg">Categoría "Otro": Consultanos para el precio final.</div>`;
+    }
+
+    document.getElementById('resultado').innerText = `Total: $${total.toLocaleString('es-AR')}`;
+    document.getElementById('promo-info').innerHTML = mensaje;
+
+    const categoriaText = document.getElementById('categoria').options[document.getElementById('categoria').selectedIndex].text;
+    const msg = `Hola! Quiero un cuadro de ${ancho}x${alto}cm. Foto: ${categoriaText}. Cantidad: ${cantidad}. Total estimado: $${total.toLocaleString('es-AR')}.`;
+    
+    // REEMPLAZÁ CON TU WHATSAPP (549...)
+    document.getElementById('link-wpp').href = `https://wa.me/549261XXXXXXX?text=${encodeURIComponent(msg)}`;
+}
+
+window.onload = calcular;
+</script>
+
+</body>
+</html>
